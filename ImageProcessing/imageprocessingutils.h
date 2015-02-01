@@ -12,6 +12,7 @@ namespace image_processing_utils
 	void drawSquares(cv::Mat& image, const std::vector<std::vector<cv::Point>>& squares, bool R = false, bool G = false, bool B = false);
 	cv::Mat captureSoduku(const int minAreaPercentageFilter, const int maxAreaPercentageFilter, std::vector<cv::Point>& square, const int nbIteration);
 	
+	static const std::string WEBCAM_WINDOW_TITLE = "Stream";
 }
 
 #endif
