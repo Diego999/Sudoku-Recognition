@@ -238,3 +238,33 @@ bool image_processing_utils::removeDuplicateSquares(std::vector<std::vector<Poin
 	
 	return squares.size() == 81;
 }
+
+//Sort the squares by order where they appeared in the sudoku in row major order
+std::vector<std::vector<Point>> image_processing_utils::labelling(const std::vector<std::vector<Point>>& squares)
+{
+	std::vector<std::vector<Point>> sortedSquares(squares);
+	for(auto& square : sortedSquares)
+		image_processing_utils::prepareQuadri(square);
+
+	std::vector<std::vector<Point>> labels;
+	std::vector<std::vector<Point>> rows;
+	for(int i = 0; i < 9; ++i)
+	{
+		rows.clear();
+
+		//Sort by row
+		std::sort(sortedSquares.begin(), sortedSquares.end(), [](const vector<Point>& p1, const vector<Point>& p2) -> bool {return p1[0].y > p2[0].y;});
+
+		//Then sort by col
+		for(int j = 0; j < 9; ++j)
+		{
+			rows.push_back(sortedSquares.back());
+			std::sort(rows.begin(), rows.end(), [](const vector<Point>& p1, const vector<Point>& p2) -> bool {return p1[0].x < p2[0].x;});
+			sortedSquares.pop_back();
+		}
+		for(auto& square : rows)
+			labels.push_back(square);
+	}
+
+	return labels;
+}
