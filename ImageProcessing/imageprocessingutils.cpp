@@ -164,3 +164,33 @@ void image_processing_utils::prepareQuadri(std::vector<Point>& quadri)
 	quadri.push_back(botL);
 }
 
+Mat image_processing_utils::cropPicture(const std::vector<Point>& srcQuadri, const Mat& srcImg, const int w, const int h)
+{
+	std::vector<Point> quadri(srcQuadri);
+	image_processing_utils::prepareQuadri(quadri);
+
+    Mat dstImg;
+    dstImg.create(srcImg.size(), srcImg.type());
+ 
+    Point2f srcPoints[4];
+    Point2f dstPoints[4];
+
+	dstPoints[0] = Point2f(0, 0);
+    dstPoints[1] = Point2f(w, 0);
+    dstPoints[2] = Point2f(w, h);
+    dstPoints[3] = Point2f(0, h);
+    
+    for(int i = 0; i < quadri.size(); ++i)
+        srcPoints[i] = quadri[i];
+
+    warpPerspective(srcImg, dstImg, getPerspectiveTransform(srcPoints, dstPoints), Size(w, h));
+
+    #if D_DEBUG
+    	Mat img = dstImg.clone();
+		namedWindow(image_processing_utils::CROP_SUDOKU_WINDOW_TITLE, CV_WINDOW_AUTOSIZE);
+	    imshow(image_processing_utils::CROP_SUDOKU_WINDOW_TITLE, img);
+    #endif
+
+    return dstImg;
+}
+

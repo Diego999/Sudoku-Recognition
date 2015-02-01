@@ -12,8 +12,11 @@ namespace image_processing_utils
 	void drawSquares(cv::Mat& image, const std::vector<std::vector<cv::Point>>& squares, bool R = false, bool G = false, bool B = false);
 	cv::Mat captureSoduku(const int minAreaPercentageFilter, const int maxAreaPercentageFilter, std::vector<cv::Point>& square, const int nbIteration);
 	void prepareQuadri(std::vector<cv::Point>& quadri);
+	cv::Mat cropPicture(const std::vector<cv::Point>& srcQuadri, const cv::Mat& srcImg, const int w, const int h);
 	
+
 	static const std::string WEBCAM_WINDOW_TITLE = "Stream";
+	static const std::string CROP_SUDOKU_WINDOW_TITLE = "Croped Sudoku";
 }
 
 #endif
