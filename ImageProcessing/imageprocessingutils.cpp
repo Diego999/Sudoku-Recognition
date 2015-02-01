@@ -307,3 +307,29 @@ std::vector<Mat> image_processing_utils::extractBlocks(const std::vector<std::ve
 
 	return blocks;
 }
+
+//Extract digit block with their id, in row major order, starting at 0
+std::vector<std::pair<int, Mat>> image_processing_utils::extractDigitBlocks(const std::vector<Mat>& allBlocks, const int w, const int h)
+{
+	std::vector<Mat> blocks(allBlocks);
+	std::vector<std::pair<int, Mat>> digits;
+    int id = 0;
+    for(auto& b : blocks)
+    {
+    	++id;
+        double white = 0;
+        for(int j = 0; j < b.rows; ++j)
+            for(int i = 0; i < b.cols; ++i)
+                if (static_cast<int>(b.at<uchar>(j, i)) == 255)
+                    ++white;
+        
+        //Filter percentage of white
+        int v = 100*white/(b.rows*b.cols);
+        if(v < 98 && v > 60) 
+        {
+            resize(b, b, Size(w, h));
+            digits.push_back(std::pair<int, Mat>(id-1, b));
+        }
+    }
+    return digits;
+}

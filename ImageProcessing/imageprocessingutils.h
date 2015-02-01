@@ -16,10 +16,12 @@ namespace image_processing_utils
 	bool removeDuplicateSquares(std::vector<std::vector<cv::Point>>& squares);
 	std::vector<std::vector<cv::Point>> labelling(const std::vector<std::vector<cv::Point>>& squares);
 	std::vector<cv::Mat> extractBlocks(const std::vector<std::vector<cv::Point>>& squares, const cv::Mat& image);
-	
+	std::vector<std::pair<int, cv::Mat>> extractDigitBlocks(const std::vector<cv::Mat>& blocks, const int w, const int h);
+
 
 	static const std::string WEBCAM_WINDOW_TITLE = "Stream";
 	static const std::string CROP_SUDOKU_WINDOW_TITLE = "Croped Sudoku";
+	static const std::string LABELED_SUDOKU_WINDOW_TITLE = "Sudoku Labeled";
 }
 
 #endif
