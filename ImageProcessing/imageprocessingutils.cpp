@@ -194,3 +194,47 @@ Mat image_processing_utils::cropPicture(const std::vector<Point>& srcQuadri, con
     return dstImg;
 }
 
+//Return true if we found the 81 squares of the sudoku
+bool image_processing_utils::removeDuplicateSquares(std::vector<std::vector<Point>>& squares)
+{
+	std::vector<Rect> rectangles;
+	for(auto& square : squares)
+		rectangles.push_back(boundingRect(square));
+
+	std::vector<Point> gCenters;
+	for(auto& square : squares)
+	{
+		Point p(0,0);
+		for(int i = 0; i < 4; ++i)
+		{
+			p.x += square[i].x;
+			p.y += square[i].y;
+		}
+
+		p.x /= 4.0;
+		p.y /= 4.0;
+		gCenters.push_back(p);
+	}
+
+	std::vector<std::vector<Point>> squaresCopy(squares);
+	std::vector<bool> visited(rectangles.size(), false);
+	squares.clear();
+	for(auto& g : gCenters)
+	{
+		std::vector<std::vector<Point>> rect;
+		for(int j = 0; j < rectangles.size(); ++j)
+			if(!visited[j] && rectangles[j].contains(g))
+			{
+				visited[j] = true;
+				rect.push_back(squaresCopy[j]);
+			}
+		
+		if(rect.size() > 0)
+		{
+			sort(rect.begin(), rect.end(), [](const vector<Point>& p1, const vector<Point>&p2) -> bool {return contourArea(p1) > contourArea(p2);});
+			squares.push_back(rect[0]);
+		}
+	}
+	
+	return squares.size() == 81;
+}
