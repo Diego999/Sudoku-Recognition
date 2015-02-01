@@ -83,3 +83,24 @@ std::vector<std::vector<cv::Point>> image_processing_utils::findSquares(const Ma
     }
     return squares;
 }
+
+void image_processing_utils::drawSquares(Mat& image, const std::vector<std::vector<Point>>& squares, bool R, bool G, bool B)
+{
+	for (auto& square : squares)
+    {
+        const Point* p = &square[0];
+        int n = (int)square.size();
+        char r,g,b;
+        r = g = b = 0;
+        if(R)
+        	r = 255;
+        else if(G)
+        	g = 255;
+        else if(B)
+        	b = 255;
+        else
+        	r = g = b = 128;
+
+        polylines(image, &p, &n, 1, true, Scalar(r,g,b), 3, CV_AA);
+    }
+}
