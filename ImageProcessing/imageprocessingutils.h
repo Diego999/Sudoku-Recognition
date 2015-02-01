@@ -15,6 +15,8 @@ namespace image_processing_utils
 	cv::Mat cropPicture(const std::vector<cv::Point>& srcQuadri, const cv::Mat& srcImg, const int w, const int h);
 	bool removeDuplicateSquares(std::vector<std::vector<cv::Point>>& squares);
 	std::vector<std::vector<cv::Point>> labelling(const std::vector<std::vector<cv::Point>>& squares);
+	std::vector<cv::Mat> extractBlocks(const std::vector<std::vector<cv::Point>>& squares, const cv::Mat& image);
+	
 
 	static const std::string WEBCAM_WINDOW_TITLE = "Stream";
 	static const std::string CROP_SUDOKU_WINDOW_TITLE = "Croped Sudoku";

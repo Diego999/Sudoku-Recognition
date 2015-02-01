@@ -268,3 +268,42 @@ std::vector<std::vector<Point>> image_processing_utils::labelling(const std::vec
 
 	return labels;
 }
+
+std::vector<Mat> image_processing_utils::extractBlocks(const std::vector<std::vector<Point>>& unlabeledSquares, const Mat& image)
+{
+	std::vector<std::vector<Point>> squares = image_processing_utils::labelling(unlabeledSquares);
+
+	#if D_DEBUG
+		Mat img = image.clone();
+		drawSquares(sudoku, squares, 0, true, 0);
+		int i = 0;
+		for(auto& square : squares)
+		{
+			string lbl = to_string(i++);
+			putText(img, lbl, Point(15+square[0].x,15+square[0].y), FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 0, 0));
+		}
+		namedWindow(image_processing_utils::LABELED_SUDOKU_WINDOW_TITLE, CV_WINDOW_AUTOSIZE);
+    	imshow(image_processing_utils::LABELED_SUDOKU_WINDOW_TITLE, img);
+	#endif
+
+	vector<Mat> blocks;
+	int w = 0;
+	int h = 0;
+	
+	for(auto& square : squares)
+	{
+		w += abs(square[1].x-square[0].x);
+		h += abs(square[3].y-square[0].y);
+	}
+	
+	w /= squares.size();
+	h /= squares.size();
+	
+	for(auto& square : squares)
+		blocks.push_back(image_processing_utils::cropPicture(square, image, w, h));
+
+    for(auto& b : blocks)
+        b = b > 128;
+
+	return blocks;
+}
