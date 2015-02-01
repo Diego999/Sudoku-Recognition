@@ -140,3 +140,27 @@ Mat image_processing_utils::captureSoduku(const int minAreaPercentageFilter, con
     return sudoku;
 }
 
+//Sort the points of a quadrilateral in the following order : TopL, TopR, BoR, BoL
+void image_processing_utils::prepareQuadri(std::vector<Point>& quadri)
+{
+	std::sort(quadri.begin(), quadri.end(), [](const Point& a, const Point& b) -> bool {return a.x < b.x;});
+
+	//Find topL and botL
+	Point topL, botL;
+	bool topLbotL= quadri[0].y > quadri[1].y;
+	topL = quadri[topLbotL ? 1 : 0];
+	botL = quadri[topLbotL ? 0 : 1];
+	
+
+	Point topR, botR;
+	bool topRbotR = quadri[2].y > quadri[3].y;
+	topR = quadri[topRbotR ? 3 : 2];
+	botR = quadri[topRbotR ? 2 : 3];
+
+	quadri.clear();
+	quadri.push_back(topL);
+	quadri.push_back(topR);
+	quadri.push_back(botR);
+	quadri.push_back(botL);
+}
+
