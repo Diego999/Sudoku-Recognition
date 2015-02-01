@@ -104,3 +104,39 @@ void image_processing_utils::drawSquares(Mat& image, const std::vector<std::vect
         polylines(image, &p, &n, 1, true, Scalar(r,g,b), 3, CV_AA);
     }
 }
+
+Mat image_processing_utils::captureSoduku(const int minAreaPercentageFilter, const int maxAreaPercentageFilter, std::vector<Point>& square, const int nbIteration)
+{
+	VideoCapture capture(0);//0 = default and we assume it always exists
+    
+    int width = capture.get(CV_CAP_PROP_FRAME_WIDTH);
+    int height = capture.get(CV_CAP_PROP_FRAME_HEIGHT);
+    bool isASudokuCaptured = false;
+
+    Mat sudoku;
+    namedWindow(image_processing_utils::WEBCAM_WINDOW_TITLE, CV_WINDOW_AUTOSIZE);
+    int ithIteration = 1;
+    while(waitKey(10) < 0 && !isASudokuCaptured)
+    {
+        Mat frame;
+        capture >> frame;
+        std::vector<std::vector<Point>> squares = image_processing_utils::findSquares(frame, minAreaPercentageFilter, maxAreaPercentageFilter, width*height);
+        
+        if(squares.size() > 0)
+        {
+            isASudokuCaptured = ++ithIteration >= nbIteration;
+            sudoku = frame.clone();
+            
+            square = *std::min_element(squares.begin(), squares.end(), [](const vector<Point>& p1, const vector<Point>& p2) -> bool {return contourArea(p1) < contourArea(p2);});
+
+            squares.clear();
+        	squares.push_back(square);
+        }
+
+        drawSquares(frame, squares);
+        imshow(image_processing_utils::WEBCAM_WINDOW_TITLE, frame);
+    }
+
+    return sudoku;
+}
+
