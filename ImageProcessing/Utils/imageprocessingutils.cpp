@@ -135,6 +135,7 @@ Mat image_processing_utils::captureSoduku(const int minAreaPercentageFilter, con
         drawSquares(frame, squares, true);
         imshow(image_processing_utils::WEBCAM_WINDOW_TITLE, frame);
     }
+    destroyWindow(image_processing_utils::WEBCAM_WINDOW_TITLE);
 
     return sudoku;
 }
