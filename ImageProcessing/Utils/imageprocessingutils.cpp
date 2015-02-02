@@ -89,7 +89,7 @@ void image_processing_utils::drawSquares(Mat& image, const std::vector<std::vect
     {
         const Point* p = &square[0];
         int n = (int)square.size();
-        char r,g,b;
+        int r,g,b;
         r = g = b = 0;
         if(R)
         	r = 255;
@@ -100,7 +100,7 @@ void image_processing_utils::drawSquares(Mat& image, const std::vector<std::vect
         else
         	r = g = b = 128;
 
-        polylines(image, &p, &n, 1, true, Scalar(r,g,b), 3, CV_AA);
+        polylines(image, &p, &n, 1, true, Scalar(b, g, r), 3, CV_AA);
     }
 }
 
@@ -132,7 +132,7 @@ Mat image_processing_utils::captureSoduku(const int minAreaPercentageFilter, con
         	squares.push_back(square);
         }
 
-        drawSquares(frame, squares);
+        drawSquares(frame, squares, true);
         imshow(image_processing_utils::WEBCAM_WINDOW_TITLE, frame);
     }
 
