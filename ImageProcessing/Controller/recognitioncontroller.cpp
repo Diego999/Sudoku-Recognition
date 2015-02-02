@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 {
 	RecognitionController controller;
 	controller.captureSudoku();
-	//controller.cropSudoku();
+	controller.cropSudoku();
 	//controller.findAndLabelBlocks();
 	return 0;
 }
