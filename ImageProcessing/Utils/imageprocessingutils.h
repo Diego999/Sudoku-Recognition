@@ -20,6 +20,8 @@ namespace image_processing_utils
 	std::vector<cv::Mat> extractBlocks(const std::vector<std::vector<cv::Point>>& squares, const cv::Mat& image);
 	std::vector<std::pair<int, cv::Mat>> extractDigitBlocks(const std::vector<cv::Mat>& blocks, const int w, const int h);
 
+	void getSizeWebcam(int& w, int&h);
+
 	double computeAreaContour(const std::vector<cv::Point>& contour);
 
 	static const int SUDOKU_SIZE = 9;

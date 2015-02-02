@@ -8,7 +8,7 @@
 using namespace cv;
 
 #define D_DEBUG 0
-
+#define DEFAULT_WEBCAM 0
 // from OpenCV Samples
 // finds a cosine of angle between vectors from pt0->pt1 and from pt0->pt2
 double image_processing_utils::findAngle(Point p1, Point p2, Point p0)
@@ -106,10 +106,11 @@ void image_processing_utils::drawSquares(Mat& image, const std::vector<std::vect
 
 Mat image_processing_utils::captureSoduku(const int minAreaPercentageFilter, const int maxAreaPercentageFilter, std::vector<Point>& square, const int nbIteration)
 {
-	VideoCapture capture(0);//0 = default and we assume it always exists
+	VideoCapture capture(DEFAULT_WEBCAM);
     
-    int width = capture.get(CV_CAP_PROP_FRAME_WIDTH);
-    int height = capture.get(CV_CAP_PROP_FRAME_HEIGHT);
+    int width, height;
+    image_processing_utils::getSizeWebcam(width, height);
+
     bool isASudokuCaptured = false;
 
     Mat sudoku;
@@ -337,4 +338,11 @@ std::vector<std::pair<int, Mat>> image_processing_utils::extractDigitBlocks(cons
 double image_processing_utils::computeAreaContour(const std::vector<cv::Point>& contour)
 {
     return cv::contourArea(contour);
+}
+
+void image_processing_utils::getSizeWebcam(int& w, int& h)
+{
+    VideoCapture capture(DEFAULT_WEBCAM);
+    w = capture.get(CV_CAP_PROP_FRAME_WIDTH);
+    h = capture.get(CV_CAP_PROP_FRAME_HEIGHT);
 }

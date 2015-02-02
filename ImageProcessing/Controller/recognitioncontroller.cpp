@@ -37,7 +37,9 @@ void RecognitionController::findAndLabelBlocks(const double minAreaFactor, const
     else
     {
     	imgSudokuSortedBlocks = image_processing_utils::extractBlocks(uniqueSquares, imgSudokuCropped);
-    	cv::imwrite("SudokuStream.png", imgSudokuStream);
+    	int w, h;
+    	image_processing_utils::getSizeWebcam(w, h);
+    	imgSudokuLabelledDigits = image_processing_utils::extractDigitBlocks(imgSudokuSortedBlocks, w, h);
     }
 }
 
@@ -47,6 +49,15 @@ std::vector<std::vector<int>> RecognitionController::getGridFromWebcam()
 	cropSudoku();
 	findAndLabelBlocks();
 
-	std::vector<std::vector<int>> grid; //TODO
+	std::vector<std::vector<int>> grid;
 	return grid;
+}
+
+int main(int argc, char* argv[])
+{
+	RecognitionController controller;
+	controller.getGridFromWebcam();
+
+	while(cv::waitKey(10) < 0){}
+	return 0;
 }
