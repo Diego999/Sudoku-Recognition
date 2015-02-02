@@ -7,7 +7,7 @@
 
 using namespace cv;
 
-#define D_DEBUG 1
+#define D_DEBUG 0
 
 // from OpenCV Samples
 // finds a cosine of angle between vectors from pt0->pt1 and from pt0->pt2
@@ -274,12 +274,12 @@ std::vector<Mat> image_processing_utils::extractBlocks(const std::vector<std::ve
 
 	#if D_DEBUG
 		Mat img = image.clone();
-		drawSquares(img, squares, 0, true, 0);
+		drawSquares(img, squares, 0, true);
 		int i = 0;
 		for(auto& square : squares)
 		{
 			string lbl = std::to_string(i++);
-			putText(img, lbl, Point(15+square[0].x,15+square[0].y), FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 0, 0));
+			putText(img, lbl, Point(15+square[0].x,square[0].y + 25), FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 0, 0));
 		}
 		namedWindow(image_processing_utils::LABELED_SUDOKU_WINDOW_TITLE, CV_WINDOW_AUTOSIZE);
     	imshow(image_processing_utils::LABELED_SUDOKU_WINDOW_TITLE, img);

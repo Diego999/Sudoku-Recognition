@@ -22,8 +22,7 @@ private:
 	cv::Mat imgSudokuStream;
 	cv::Mat imgSudokuCropped;
 
-	std::vector<std::vector<cv::Point>> labelledSudokuBlocks;
-	std::vector<cv::Mat> imgSudokuBlocks;
+	std::vector<cv::Mat> imgSudokuSortedBlocks; //Sorted in row major
 	std::vector<std::pair<int, cv::Mat>> imgSudokuLabelledDigits;
 };
 

@@ -1,6 +1,8 @@
 #include "recognitioncontroller.h"
 #include "../Utils/imageprocessingutils.h"
 
+#include <iostream>
+
 RecognitionController::RecognitionController()
 {
 
@@ -29,8 +31,13 @@ void RecognitionController::findAndLabelBlocks(const double minAreaFactor, const
 	double minAreaPercentageFilter = 100.0*minAreaFactor*areaOneBlock/area;
     double maxAreaPercentageFilter = 100.0*maxAreaFactor*areaOneBlock/area;
 
-    //labelledSudokuBlocks = ;
-    labelledSudokuBlocks = image_processing_utils::labelling(image_processing_utils::findSquares(imgSudokuCropped, minAreaPercentageFilter, maxAreaPercentageFilter, area));
+    std::vector<std::vector<cv::Point>> uniqueSquares = image_processing_utils::findSquares(imgSudokuCropped, minAreaPercentageFilter, maxAreaPercentageFilter, area);
+    if(!image_processing_utils::removeDuplicateSquares(uniqueSquares))
+    	std::cerr << "Some blocks haven't been detected. Please try again with better conditions" << std::endl;
+    else
+    {
+    	imgSudokuSortedBlocks = image_processing_utils::extractBlocks(uniqueSquares, imgSudokuCropped);
+    }
 }
 
 int main(int argc, char* argv[])
@@ -38,6 +45,8 @@ int main(int argc, char* argv[])
 	RecognitionController controller;
 	controller.captureSudoku();
 	controller.cropSudoku();
-	//controller.findAndLabelBlocks();
+	controller.findAndLabelBlocks();
+
+	while(cv::waitKey(10) < 0){}
 	return 0;
 }
