@@ -8,6 +8,7 @@
 using namespace cv;
 
 #define D_DEBUG 0
+#define SUDOKU_SIZE 9
 
 // from OpenCV Samples
 // finds a cosine of angle between vectors from pt0->pt1 and from pt0->pt2
@@ -235,7 +236,7 @@ bool image_processing_utils::removeDuplicateSquares(std::vector<std::vector<Poin
 		}
 	}
 	
-	return squares.size() == 81;
+	return squares.size() == SUDOKU_SIZE*SUDOKU_SIZE;
 }
 
 //Sort the squares by order where they appeared in the sudoku in row major order
@@ -247,7 +248,7 @@ std::vector<std::vector<Point>> image_processing_utils::labelling(const std::vec
 
 	std::vector<std::vector<Point>> labels;
 	std::vector<std::vector<Point>> rows;
-	for(int i = 0; i < 9; ++i)
+	for(int i = 0; i < SUDOKU_SIZE; ++i)
 	{
 		rows.clear();
 
@@ -255,7 +256,7 @@ std::vector<std::vector<Point>> image_processing_utils::labelling(const std::vec
 		std::sort(sortedSquares.begin(), sortedSquares.end(), [](const vector<Point>& p1, const vector<Point>& p2) -> bool {return p1[0].y > p2[0].y;});
 
 		//Then sort by col
-		for(int j = 0; j < 9; ++j)
+		for(int j = 0; j < SUDOKU_SIZE; ++j)
 		{
 			rows.push_back(sortedSquares.back());
 			std::sort(rows.begin(), rows.end(), [](const vector<Point>& p1, const vector<Point>& p2) -> bool {return p1[0].x < p2[0].x;});
