@@ -53,11 +53,3 @@ std::vector<std::vector<int>> RecognitionController::getGridFromWebcam()
 	return grid;
 }
 
-int main(int argc, char* argv[])
-{
-	RecognitionController controller;
-	controller.getGridFromWebcam();
-
-	while(cv::waitKey(10) < 0){}
-	return 0;
-}

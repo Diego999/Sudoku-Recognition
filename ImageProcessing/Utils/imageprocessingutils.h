@@ -15,7 +15,8 @@ namespace image_processing_utils
 	cv::Mat captureSoduku(const int minAreaPercentageFilter, const int maxAreaPercentageFilter, std::vector<cv::Point>& square, const int nbIteration);
 	void prepareQuadri(std::vector<cv::Point>& quadri);
 	cv::Mat cropPicture(const std::vector<cv::Point>& srcQuadri, const cv::Mat& srcImg, const int w, const int h);
-		
+	cv::Mat automaticThreshold(const cv::Mat& image);
+
 	std::vector<std::vector<cv::Point>> labelling(const std::vector<std::vector<cv::Point>>& squares);
 	std::vector<cv::Mat> extractBlocks(const std::vector<std::vector<cv::Point>>& squares, const cv::Mat& image);
 	std::vector<std::pair<int, cv::Mat>> extractDigitBlocks(const std::vector<cv::Mat>& blocks, const int w, const int h);

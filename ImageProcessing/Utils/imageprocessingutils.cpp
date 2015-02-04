@@ -9,6 +9,7 @@ using namespace cv;
 
 #define D_DEBUG 0
 #define DEFAULT_WEBCAM 0
+
 // from OpenCV Samples
 // finds a cosine of angle between vectors from pt0->pt1 and from pt0->pt2
 double image_processing_utils::findAngle(Point p1, Point p2, Point p0)
@@ -263,6 +264,7 @@ std::vector<std::vector<Point>> image_processing_utils::labelling(const std::vec
 			std::sort(rows.begin(), rows.end(), [](const vector<Point>& p1, const vector<Point>& p2) -> bool {return p1[0].x < p2[0].x;});
 			sortedSquares.pop_back();
 		}
+
 		for(auto& square : rows)
 			labels.push_back(square);
 	}
@@ -270,12 +272,21 @@ std::vector<std::vector<Point>> image_processing_utils::labelling(const std::vec
 	return labels;
 }
 
+cv::Mat image_processing_utils::automaticThreshold(const cv::Mat& image)
+{
+    cv::Mat img;
+    cv::cvtColor(image, img, CV_RGB2GRAY);
+    cv::adaptiveThreshold(img, img, 255, cv::ADAPTIVE_THRESH_GAUSSIAN_C, cv::THRESH_BINARY, 75, 10);
+    return img;
+}
+
 std::vector<Mat> image_processing_utils::extractBlocks(const std::vector<std::vector<Point>>& unlabeledSquares, const Mat& image)
 {
 	std::vector<std::vector<Point>> squares = image_processing_utils::labelling(unlabeledSquares);
-
-	#if D_DEBUG
-		Mat img = image.clone();
+    Mat img;
+	
+    #if D_DEBUG
+        img = image.clone();	
 		drawSquares(img, squares, 0, true);
 		int i = 0;
 		for(auto& square : squares)
@@ -286,6 +297,8 @@ std::vector<Mat> image_processing_utils::extractBlocks(const std::vector<std::ve
 		namedWindow(image_processing_utils::LABELED_SUDOKU_WINDOW_TITLE, CV_WINDOW_AUTOSIZE);
     	imshow(image_processing_utils::LABELED_SUDOKU_WINDOW_TITLE, img);
 	#endif
+
+    img = image_processing_utils::automaticThreshold(image);
 
 	vector<Mat> blocks;
 	int w = 0;
@@ -301,10 +314,7 @@ std::vector<Mat> image_processing_utils::extractBlocks(const std::vector<std::ve
 	h /= squares.size();
 	
 	for(auto& square : squares)
-		blocks.push_back(image_processing_utils::cropPicture(square, image, w, h));
-
-    for(auto& b : blocks)
-        b = b > 128;
+		blocks.push_back(image_processing_utils::cropPicture(square, img, w, h));
 
 	return blocks;
 }
