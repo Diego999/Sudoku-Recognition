@@ -19,7 +19,8 @@ public:
     int setValidationSetPath(const std::string& validationSetPath, const char separator);
     void startTraining();
     std::vector<std::vector<double>> feed(const std::vector<std::string>& filepaths);
-    
+    std::vector<std::vector<double>> feed(const std::vector<std::vector<double>>& inputs);
+
     static const std::vector<std::vector<double>> generateTargets(const std::vector<std::string>& filepaths, const char separator);
     
     bool hasValidationSet() const { return !m_validationSet.empty(); }

@@ -140,11 +140,13 @@ void TrainingController::startTraining()
 std::vector<std::vector<double>> TrainingController::feed(const std::vector<std::string>& filepaths)
 {
     std::vector<std::vector<double>> pictures = PictureController::loadPictures(filepaths);
-    std::vector<std::vector<double>> fullResults = m_annController->feedForward(pictures);
-    std::vector<std::vector<double>> results;
-    for(auto& result : fullResults)
-        results.push_back(result);
-    return results;
+    return feed(pictures);
+}
+
+//Return the prediction for the different class. Closest to 0.9 is the corresponding class
+std::vector<std::vector<double>> TrainingController::feed(const std::vector<std::vector<double>>& inputs)
+{
+    return m_annController->feedForward(inputs);
 }
 
 void TrainingController::reset()

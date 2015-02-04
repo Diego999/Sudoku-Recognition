@@ -23,7 +23,7 @@ void RecognitionController::cropSudoku(const int destW, const int destH)
 	imgSudokuCropped = image_processing_utils::cropPicture(exteriorSquareSudoku, imgSudokuStream, destW, destH);
 }
 
-void RecognitionController::findAndLabelBlocks(const double minAreaFactor, const double maxAreaFactor)
+void RecognitionController::findAndLabelBlocks(const double minAreaFactor, const double maxAreaFactor, const int finalWBlock, const int finalHBlock)
 {
     double area = image_processing_utils::computeAreaContour(exteriorSquareSudoku);
     double areaOneBlock = (area/(image_processing_utils::SUDOKU_SIZE*image_processing_utils::SUDOKU_SIZE));
@@ -33,23 +33,22 @@ void RecognitionController::findAndLabelBlocks(const double minAreaFactor, const
 
     std::vector<std::vector<cv::Point>> uniqueSquares = image_processing_utils::findSquares(imgSudokuCropped, minAreaPercentageFilter, maxAreaPercentageFilter, area);
     if(!image_processing_utils::removeDuplicateSquares(uniqueSquares))
+    {
     	std::cerr << "Some blocks haven't been detected. Please try again with better conditions" << std::endl;
+    	exit(-1);
+    }
     else
     {
     	imgSudokuSortedBlocks = image_processing_utils::extractBlocks(uniqueSquares, imgSudokuCropped);
-    	int w, h;
-    	image_processing_utils::getSizeWebcam(w, h);
-    	imgSudokuLabelledDigits = image_processing_utils::extractDigitBlocks(imgSudokuSortedBlocks, w, h);
+    	imgSudokuLabelledDigits = image_processing_utils::extractDigitBlocks(imgSudokuSortedBlocks, finalWBlock, finalHBlock);
     }
 }
 
-std::vector<std::vector<int>> RecognitionController::getGridFromWebcam()
+std::vector<std::pair<int, cv::Mat>> RecognitionController::getDigitSudokuWebcam()
 {
 	captureSudoku();
 	cropSudoku();
 	findAndLabelBlocks();
 
-	std::vector<std::vector<int>> grid;
-	return grid;
+	return imgSudokuLabelledDigits;
 }
-
