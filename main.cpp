@@ -38,7 +38,6 @@ int main(int argc, char* argv[])
 	std::vector<std::vector<double>> recognitionResults = training.feed(digitBlocks);
 	for(int i = 0; i < unrecognizedDigits.size(); ++i)
 		std::cout << unrecognizedDigits[i].first << " : " << (1+findIdxMax(recognitionResults[i])) << " <- final choice" << std::endl;
-	int i;
-	std::cin >> i;
+
 	return 0;
 }
