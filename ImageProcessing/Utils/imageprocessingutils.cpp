@@ -336,7 +336,7 @@ std::vector<std::pair<int, Mat>> image_processing_utils::extractDigitBlocks(cons
         
         //Filter percentage of white
         int v = 100*white/(b.rows*b.cols);
-        if(v < 98 && v > 60) 
+        if(v < 95 && v > 70) 
         {
             resize(b, b, Size(w, h));
             digits.push_back(std::pair<int, Mat>(id-1, b));
