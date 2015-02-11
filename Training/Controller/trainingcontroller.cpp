@@ -5,6 +5,9 @@
 #include <fstream>
 #include <sstream>
 
+const double TrainingController::TARGET_POSITIVE = 0.9;
+const double TrainingController::TARGET_NEGATIVE = 0.1;
+
 TrainingController::TrainingController():
     m_annController(nullptr)
 {
@@ -42,7 +45,7 @@ const std::vector<std::vector<double>> TrainingController::generateTargets(const
         
         int digit = tokens[tokens.size()-2].back()-'0';
         for(int i = 1; i <= 9; ++i)
-            target.push_back(digit == i ? 0.9 : 0.1);
+            target.push_back(digit == i ? TARGET_POSITIVE : TARGET_NEGATIVE);
         targets.push_back(target);
     }
     return targets;

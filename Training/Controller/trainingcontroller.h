@@ -27,6 +27,9 @@ public:
     void reset();
     void stopTraining();
 
+    static const double TARGET_POSITIVE;
+    static const double TARGET_NEGATIVE;
+    
 private:
     static int readSetPath(const std::string& setPath, std::vector<std::pair<std::vector<double>, std::vector<double>>> & set, const char separator);
 
